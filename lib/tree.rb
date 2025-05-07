@@ -46,6 +46,43 @@ class Tree
     root
   end
 
+  # helper method to the #delete method to find the inorder successor
+  def find_successor(node)
+    current_node = node.right
+
+    # Go the the leftmost node of the right subtree of the node we are deleting and return it
+    current_node = current_node.left until current_node.left.nil?
+
+    current_node
+  end
+
+  # Deletes a node based on the given key
+  def delete(key, root = @root) # rubocop:disable Metrics/AbcSize
+    # Base case
+    return root if root.nil?
+
+    # Navigates the BST:
+    # if key is smaller, go left
+    # if key is bigger, go right
+    if root.data > key
+      root.left = delete(key, root.left)
+    elsif root.data < key
+      root.right = delete(key, root.right)
+    else
+      # Cases when root has 0 children or only right child
+      return root.right if root.left.nil?
+
+      # When root has only left child
+      return root.left if root.right.nil?
+
+      # When both children are present
+      successor = find_successor(root)
+      root.data = successor.data
+      root.right = delete(successor.data, root.right)
+    end
+    root
+  end
+
   def pretty_print(node = @root, prefix = "", is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
