@@ -1,3 +1,4 @@
+# this file defines the sortable module which holds the sorting algorithm for the data
 module Sortable
   def merge_sort(array)
     # base case
@@ -17,15 +18,13 @@ module Sortable
     merge(a, b)
   end
 
-  def merge(a, b)
+  def merge(a, b) # rubocop:disable Naming/MethodParameterName
     arr = []
 
     while !a.empty? && !b.empty?
-      if a[0] > b[0]
+      if a[0] >= b[0]
         arr.push(b.shift)
       elsif b[0] > a[0]
-        arr.push(a.shift)
-      else
         arr.push(a.shift)
       end
     end

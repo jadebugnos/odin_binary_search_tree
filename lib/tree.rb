@@ -1,8 +1,11 @@
 require_relative "node"
+require_relative "sortable"
 
 # this file defines the Tree class
 class Tree
-  attr_accessor :array
+  include Sortable
+
+  attr_accessor :array, :root
 
   def initialize(data_arr)
     @data_arr = data_arr
@@ -10,6 +13,7 @@ class Tree
   end
 
   def build_tree_recur(arr, start, last)
+    # base case
     return nil if start > last
 
     # Find the middle element
@@ -17,8 +21,9 @@ class Tree
     # Set the mid of arr the root node
     root = Node.new(arr[mid])
 
+    # create the left subtree
     root.left = build_tree_recur(arr, start, mid - 1)
-
+    # create the right subtree
     root.right = build_tree_recur(arr, mid + 1, last)
 
     root
@@ -26,6 +31,19 @@ class Tree
 
   def build_tree(arr)
     @root = build_tree_recur(arr, 0, arr.length - 1)
+  end
+
+  # method to insert a new node with the given key
+  def insert(key, root = @root)
+    return Node.new(key) if root.nil?
+
+    if key <= root.data
+      root.left = insert(key, root.left)
+    elsif key > root.data
+      root.right = insert(key, root.right)
+    end
+
+    root
   end
 
   def pretty_print(node = @root, prefix = "", is_left = true)
