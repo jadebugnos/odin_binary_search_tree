@@ -83,6 +83,21 @@ class Tree
     root
   end
 
+  # Navigates the BST until a node is nil or the node is found based on the key
+  # and returns it otherwise nil
+  def find(key, current_node = @root)
+    until current_node.nil?
+      if key > current_node.data
+        current_node = current_node.right
+      elsif key < current_node.data
+        current_node = current_node.left
+      else
+        return current_node
+      end
+    end
+    nil
+  end
+
   def pretty_print(node = @root, prefix = "", is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
