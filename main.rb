@@ -14,4 +14,7 @@ test.insert(10)
 test.delete(46)
 test.insert(46)
 test.delete(23)
-p test.find(8)
+test.pretty_print
+test.level_order do |node|
+  puts node.data
+end
