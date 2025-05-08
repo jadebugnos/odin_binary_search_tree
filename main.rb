@@ -15,6 +15,4 @@ test.delete(46)
 test.insert(46)
 test.delete(23)
 test.pretty_print
-test.level_order do |node|
-  puts node.data
-end
+p test.inorder

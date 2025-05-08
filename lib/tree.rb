@@ -98,6 +98,7 @@ class Tree
     nil
   end
 
+  # traverse the BST in breadth-first order
   def level_order(root = @root)
     return if root.nil?
 
@@ -117,6 +118,52 @@ class Tree
 
       queue.push(node.right) if node.right
     end
+
+    values unless block_given?
+  end
+
+  # def depth_first(node = @root, values = [])
+  #   return values if node.nil?
+
+  #   if block_given?
+  #     yield(node)
+  #   else
+  #     values << node.data
+  #   end
+
+  #   preorder(node.left, values)
+  #   preorder(node.right, values)
+
+  #   values unless block_given?
+  # end
+
+  def preorder(node = @root, values = [])
+    return values if node.nil?
+
+    if block_given?
+      yield(node)
+    else
+      values << node.data
+    end
+
+    preorder(node.left, values)
+    preorder(node.right, values)
+
+    values unless block_given?
+  end
+
+  def inorder(node = @root, values = [])
+    return if node.nil?
+
+    inorder(node.left, values)
+
+    if block_given?
+      yield(node)
+    else
+      values << node.data
+    end
+
+    inorder(node.right, values)
 
     values unless block_given?
   end
