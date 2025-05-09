@@ -92,13 +92,14 @@ class Tree
       elsif key < current_node.data
         current_node = current_node.left
       else
-        return current_node
+        return unless block_given? ? yield(current_node) : current_node
       end
     end
     nil
   end
 
-  # traverse the BST in breadth-first order
+  # traverse the BST in breadth-first order. optionally accepts a block;
+  # if no block is given, it returns an array of node in level order.
   def level_order(root = @root)
     return if root.nil?
 
@@ -122,21 +123,11 @@ class Tree
     values unless block_given?
   end
 
-  # def depth_first(node = @root, values = [])
-  #   return values if node.nil?
+  # Depth-first traversal methods for the BST.
+  # Each method optionally accepts a block; if no block is given,
+  # it returns an array of node values in the corresponding order.
 
-  #   if block_given?
-  #     yield(node)
-  #   else
-  #     values << node.data
-  #   end
-
-  #   preorder(node.left, values)
-  #   preorder(node.right, values)
-
-  #   values unless block_given?
-  # end
-
+  ## Preorder traversal: root -> left -> right
   def preorder(node = @root, values = [])
     return values if node.nil?
 
@@ -152,6 +143,23 @@ class Tree
     values unless block_given?
   end
 
+  # postorder traversal: left -> right -> root
+  def postorder(node = @root, values = [])
+    return if node.nil?
+
+    postorder(node.left, values)
+    postorder(node.right, values)
+
+    if block_given?
+      yield(node)
+    else
+      values << node.data
+    end
+
+    values unless block_given?
+  end
+
+  # inorder traversal: left => root -> right
   def inorder(node = @root, values = [])
     return if node.nil?
 
@@ -167,6 +175,29 @@ class Tree
 
     values unless block_given?
   end
+
+  # finds the hight of a node in the BST based on the given value
+  def height(value)
+    node = find(value)
+
+    return nil if node.nil?
+
+    find_height(node)
+  end
+
+  # helper method for the height method to recursively calculate the height of a node
+  def find_height(node)
+    return -1 if node.nil?
+
+    left_height = find_height(node.left)
+    right_height = find_height(node.right)
+
+    [left_height, right_height].max + 1
+  end
+
+  # def depth(value)
+  #   node = find(value) { |node|  }
+  # end
 
   def pretty_print(node = @root, prefix = "", is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
