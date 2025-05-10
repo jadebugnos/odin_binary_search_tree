@@ -131,52 +131,40 @@ class Tree # rubocop:disable Metrics/ClassLength
   # it returns an array of node values in the corresponding order.
 
   ## Preorder traversal: root -> left -> right
-  def preorder(node = @root, values = [])
+  def preorder(node = @root, values = [], &block)
     return values if node.nil?
 
-    if block_given?
-      yield(node)
-    else
-      values << node.data
-    end
+    block ? block.call(node) : values << node.data
 
-    preorder(node.left, values)
-    preorder(node.right, values)
+    preorder(node.left, values, &block)
+    preorder(node.right, values, &block)
 
-    values unless block_given?
+    values unless block
   end
 
   # postorder traversal: left -> right -> root
-  def postorder(node = @root, values = [])
+  def postorder(node = @root, values = [], &block)
     return if node.nil?
 
-    postorder(node.left, values)
-    postorder(node.right, values)
+    postorder(node.left, values, &block)
+    postorder(node.right, values, &block)
 
-    if block_given?
-      yield(node)
-    else
-      values << node.data
-    end
+    block ? block.call(node) : values << node.data
 
-    values unless block_given?
+    values unless block
   end
 
   # inorder traversal: left => root -> right
-  def inorder(node = @root, values = [])
+  def inorder(node = @root, values = [], &block)
     return if node.nil?
 
-    inorder(node.left, values)
+    inorder(node.left, values, &block)
 
-    if block_given?
-      yield(node)
-    else
-      values << node.data
-    end
+    block ? block.call(node) : values << node.data
 
-    inorder(node.right, values)
+    inorder(node.right, values, &block)
 
-    values unless block_given?
+    values unless block
   end
 
   # finds the hight of a node in the BST based on the given value
@@ -214,7 +202,7 @@ class Tree # rubocop:disable Metrics/ClassLength
   def balance?
     result = [true]
 
-    level_order do |node|
+    postorder do |node|
       break unless result[0]
 
       find_height(node) do |left, right|
