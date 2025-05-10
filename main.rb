@@ -15,4 +15,8 @@ test.delete(46)
 test.insert(46)
 test.delete(23)
 test.pretty_print
-p test.height(8)
+
+counter = 0
+
+test.find(6345) { |node| p node }
+puts counter

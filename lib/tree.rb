@@ -92,7 +92,7 @@ class Tree
       elsif key < current_node.data
         current_node = current_node.left
       else
-        return unless block_given? ? yield(current_node) : current_node
+        return block_given? ? yield(current_node) : current_node
       end
     end
     nil
@@ -195,9 +195,9 @@ class Tree
     [left_height, right_height].max + 1
   end
 
-  # def depth(value)
-  #   node = find(value) { |node|  }
-  # end
+  def depth(_value, _root = @root)
+    counter
+  end
 
   def pretty_print(node = @root, prefix = "", is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
