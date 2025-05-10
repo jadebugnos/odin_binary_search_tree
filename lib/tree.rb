@@ -2,7 +2,7 @@ require_relative "node"
 require_relative "sortable"
 
 # this file defines the Tree class
-class Tree
+class Tree # rubocop:disable Metrics/ClassLength
   include Sortable
 
   attr_accessor :array, :root
@@ -195,6 +195,8 @@ class Tree
     left_height = find_height(node.left)
     right_height = find_height(node.right)
 
+    yield(left_height, right_height) if block_given?
+
     [left_height, right_height].max + 1
   end
 
@@ -206,6 +208,20 @@ class Tree
     return edges if node
 
     nil
+  end
+
+  def balance?
+    result = [true]
+
+    level_order do |node|
+      break unless result[0]
+
+      find_height(node) do |left, right|
+        result[0] = false if (left - right).abs > 1
+      end
+    end
+
+    result[0]
   end
 
   def pretty_print(node = @root, prefix = "", is_left = true)

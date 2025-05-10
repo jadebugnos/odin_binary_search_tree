@@ -16,6 +16,4 @@ test.insert(46)
 test.delete(23)
 test.pretty_print
 
-counter = 0
-
-p test.depth(100)
+p test.balance?
