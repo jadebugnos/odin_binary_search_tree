@@ -16,4 +16,6 @@ test.insert(46)
 test.delete(23)
 test.pretty_print
 
+test.rebalance
+test.pretty_print
 p test.balance?

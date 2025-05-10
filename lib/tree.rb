@@ -210,6 +210,7 @@ class Tree # rubocop:disable Metrics/ClassLength
     nil
   end
 
+  # returns true if the BST is balanced otherwise returns false
   def balance?
     result = [true]
 
@@ -222,6 +223,14 @@ class Tree # rubocop:disable Metrics/ClassLength
     end
 
     result[0]
+  end
+
+  # collects all the entries in the tree, removes duplicates,
+  # sorts the values, and then rebuilds the BST to ensure it is balanced.
+  def rebalance
+    values = inorder.uniq
+    sorted = merge_sort(values)
+    build_tree(sorted)
   end
 
   def pretty_print(node = @root, prefix = "", is_left = true)
