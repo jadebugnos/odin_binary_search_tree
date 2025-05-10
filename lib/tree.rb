@@ -29,8 +29,11 @@ class Tree # rubocop:disable Metrics/ClassLength
     root
   end
 
-  def build_tree(arr)
-    @root = build_tree_recur(arr, 0, arr.length - 1)
+  def build_tree(arr = @data_arr.uniq)
+    return nil unless arr.is_a?(Array) && !arr.empty?
+
+    @data_arr = merge_sort(arr)
+    @root = build_tree_recur(@data_arr, 0, arr.length - 1)
   end
 
   # method to insert a new node with the given key
@@ -203,7 +206,7 @@ class Tree # rubocop:disable Metrics/ClassLength
     result = [true]
 
     postorder do |node|
-      break unless result[0]
+      return false unless result[0]
 
       find_height(node) do |left, right|
         result[0] = false if (left - right).abs > 1
