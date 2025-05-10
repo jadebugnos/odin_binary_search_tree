@@ -18,5 +18,4 @@ test.pretty_print
 
 counter = 0
 
-test.find(6345) { |node| p node }
-puts counter
+p test.depth(100)

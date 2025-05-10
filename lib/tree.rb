@@ -83,16 +83,19 @@ class Tree
     root
   end
 
-  # Navigates the BST until a node is nil or the node is found based on the key
-  # and returns it otherwise nil
+  # Navigates the BST to find and return the node matching the given key.
+  # If a block is given, it yields each visited node to the block.
+  # returns nil if key is not found in the BST
   def find(key, current_node = @root)
     until current_node.nil?
+      yield(current_node) if block_given? # added optional block for more functionality
+
       if key > current_node.data
         current_node = current_node.right
       elsif key < current_node.data
         current_node = current_node.left
       else
-        return block_given? ? yield(current_node) : current_node
+        return current_node
       end
     end
     nil
@@ -195,8 +198,14 @@ class Tree
     [left_height, right_height].max + 1
   end
 
-  def depth(_value, _root = @root)
-    counter
+  # returns the depth (number of edges from the root) of the node with the given value.
+  # returns nil if value is not found in the BST.
+  def depth(value)
+    edges = -1
+    node = find(value) { |_node| edges += 1 } # utilize find method which have access to visited nodes
+    return edges if node
+
+    nil
   end
 
   def pretty_print(node = @root, prefix = "", is_left = true)
